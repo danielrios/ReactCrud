@@ -1,13 +1,22 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import useForm from '../hooks/useForm';
 import {Form, Button} from 'react-bootstrap';
 
-import {putUsers} from '../services/api';
+import {putUsers, getUser} from '../services/api';
 
 export default function EditUser({ match }) {
   const userId = match.params.id;
 
+  const [user, setUser] = useState({});
+
   const [{ values, loading }, handleChange, handleSubmit] = useForm();
+
+  useEffect(() => {
+    async function get() {
+      setUser(await getUser(userId));
+    }
+    get();
+  }, []); //eslint-disable-line
 
   async function atualizarUsuario() {
     const data = await putUsers(userId, values);
@@ -21,7 +30,7 @@ export default function EditUser({ match }) {
         <Form.Label>Nome</Form.Label>
         <Form.Control 
           type="text" 
-          placeholder="Digite o nome"
+          defaultValue={user.name}
           name="name"
           onChange={handleChange} 
         />
@@ -30,7 +39,7 @@ export default function EditUser({ match }) {
         <Form.Label>Email</Form.Label>
         <Form.Control 
           type="email" 
-          placeholder="Digite o email"
+          defaultValue={user.email}
           name="email"
           onChange={handleChange}
         />

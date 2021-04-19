@@ -10,6 +10,11 @@ export async function getUsers() {
     return data.result;
 }
 
+export async function getUser(id) {
+  const {data} = await axios.get('https://crud-flask-api.herokuapp.com/usuario/'+id);
+  return data.result;
+}
+
 export async function putUsers(id, users) {
   const {data} = await axios.put('https://crud-flask-api.herokuapp.com/usuario/'+id, users);
   return data;
